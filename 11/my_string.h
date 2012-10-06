@@ -29,4 +29,4 @@ int my_strncmp(const char* s, const char* t);
  * @return: Pointer to the first occurrence of c in s, or
  * NULL if it doesn't exist
  */
-char* strchr(const char* s, char c);
+char* my_strchr(const char* s, char c);
