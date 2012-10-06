@@ -7,12 +7,12 @@
 
 #include "my_string.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 int main()
 {
 	return 0;
 }
-
 
 char* my_strchr(const char* s, char c)
 {
@@ -23,7 +23,7 @@ char* my_strchr(const char* s, char c)
 	 * of the string (marked by \0) or we find an occurrence
 	 * of char c.
 	 */
-	do
+	while ((s[i] != '\0') && (pFirstOccurrence == NULL))
 	{
 		/* Check if the current char is the requested one */
 		if (s[i] == c)
@@ -35,7 +35,15 @@ char* my_strchr(const char* s, char c)
 		/* Move on to the next char */
 		i++;
 	}
-	while ((s[i] != '\0') && (pFirstOccurrence == NULL));
+
+	/* Check the special case in which we are actively looking
+	 * for the null terminating char (the first scan would
+	 * halt when reaching the null-terminator)
+	 */
+	if ((pFirstOccurrence == NULL) && (s[i] == c))
+	{
+		pFirstOccurrence = (char*)&(s[i]);
+	}
 
 	return pFirstOccurrence;
 }
