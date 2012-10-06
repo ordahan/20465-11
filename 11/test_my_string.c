@@ -33,6 +33,28 @@ int main()
 	printf("%s\n", my_strchr(len_n_match_null_first, '\0'));
 	printf("%s\n", my_strchr(len_n_match_null_mid, '\0'));
 	printf("%s\n", my_strchr(len_n_match_null_last, '\0'));
+
+	/* test my_strncmp */
+	printf("%d", my_strncmp("", "", 0) == 0);
+	printf("%d", my_strncmp("a", "", 0) == 0);
+	printf("%d", my_strncmp("", "b", 0) == 0);
+	printf("%d", my_strncmp("a", "b", 1) == -1);
+	printf("%d", my_strncmp("b", "a", 1) == 1);
+	printf("%d", my_strncmp("ab", "bb", 1) == -1);
+	printf("%d", my_strncmp("ab", "a", 1) == 0);
+	printf("%d", my_strncmp("aA", "aB", 2) == -1);
+	printf("%d", my_strncmp("ac", "ab", 2) == 1);
+
+	printf("%d", my_strcmp("", "") == 0);
+	printf("%d", my_strcmp("a", "") == 0);
+	printf("%d", my_strcmp("", "b") == 0);
+	printf("%d", my_strcmp("a", "b") == -1);
+	printf("%d", my_strcmp("b", "a") == 1);
+	printf("%d", my_strcmp("ab", "bb") == -1);
+	printf("%d", my_strcmp("ab", "a") == 0);
+	printf("%d", my_strcmp("aA", "aB") == -1);
+	printf("%d", my_strcmp("ac", "ab") == 1);
+
 	return 0;
 }
 #endif

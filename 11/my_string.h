@@ -11,6 +11,8 @@ int my_strcmp(const char* s, const char* t);
 /**
  * Compares a limited number of characters
  * in two strings, in lexical order.
+ * Assumes that the length given is smaller-equal
+ * to either of the strings lengths'.
  *
  * @param s: First string to compare
  * @param t: Second string to compare
@@ -18,7 +20,7 @@ int my_strcmp(const char* s, const char* t);
  *
  * @return: <0 if s<t, 0 if s==t, or >0 if s>t
  */
-int my_strncmp(const char* s, const char* t);
+int my_strncmp(const char* s, const char* t, unsigned int n);
 
 /**
  * Finds the first occurrence of a character in a string

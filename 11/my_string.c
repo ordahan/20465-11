@@ -8,9 +8,51 @@
 #include "my_string.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 int main()
 {
+	return 0;
+}
+
+int my_strcmp(const char* s, const char* t)
+{
+	unsigned int nMinLength = 0;
+	unsigned int nSLength = strlen(s);
+	unsigned int nTLength = strlen(t);
+
+	/* Assume s is shorter */
+	nMinLength = nSLength;
+
+	/* Check if t is shorter */
+	if (nTLength < nMinLength)
+	{
+		nMinLength = nTLength;
+	}
+
+	/* Compare both strings according to the shorter of the two */
+	return my_strncmp(s, t, nMinLength);
+}
+
+int my_strncmp(const char* s, const char* t, unsigned int n)
+{
+	int i = 0;
+
+	/* Go over both strings and compare them char by char */
+	for (i = 0; i < n; i++)
+	{
+		/* Compare the current location */
+		if (s[i] < t[i])
+		{
+			return -1;
+		}
+		else if (s[i] > t[i])
+		{
+			return 1;
+		}
+	}
+
+	/* both strings match */
 	return 0;
 }
 
