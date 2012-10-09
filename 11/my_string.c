@@ -27,6 +27,7 @@ int my_strcmp(const char* s, const char* t)
 	/* Check if t is shorter */
 	if (nTLength < nMinLength)
 	{
+		/* Mark t as the one with minimal length */
 		nMinLength = nTLength;
 	}
 
