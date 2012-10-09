@@ -1,9 +1,9 @@
-#include "my_string.h"
+#include "../my_string.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 
-#if 0
-int main()
+int test_main()
 {
 	/* Test my_strchr */
 	char c = '5';
@@ -20,7 +20,7 @@ int main()
 	char* len_n_match_null_last = "abcdefgh5\0";
 
 	printf("my_strchr\n");
-	printf("%d\n", (int)my_strchr(empty_no_match, c));
+	assert(my_strchr(empty_no_match, c) != NULL);
 	printf("%d\n", (int)my_strchr(len_1_no_match, c));
 	printf("%s\n", my_strchr(len_1_no_match, '\0'));
 	printf("%s\n", my_strchr(len_1_match, c));
@@ -45,6 +45,7 @@ int main()
 	printf("%d", my_strncmp("aA", "aB", 2) == -1);
 	printf("%d", my_strncmp("ac", "ab", 2) == 1);
 
+	/* test my_strcmp */
 	printf("%d", my_strcmp("", "") == 0);
 	printf("%d", my_strcmp("a", "") == 0);
 	printf("%d", my_strcmp("", "b") == 0);
@@ -57,4 +58,3 @@ int main()
 
 	return 0;
 }
-#endif
