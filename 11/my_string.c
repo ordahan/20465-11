@@ -57,22 +57,22 @@ int my_strncmp(const char* s, const char* t, unsigned int n)
 	return 0;
 }
 
-char* my_strchr(const char* s, char c)
+int my_strchr(const char* s, char c)
 {
-	char* pFirstOccurrence = NULL;
+	int nFirstOccurrence = -1;
 	int i = 0;
 
 	/* Go over the string char by char until we reach the end
 	 * of the string (marked by \0) or we find an occurrence
 	 * of char c.
 	 */
-	while ((s[i] != '\0') && (pFirstOccurrence == NULL))
+	while ((s[i] != '\0') && (nFirstOccurrence == -1))
 	{
 		/* Check if the current char is the requested one */
 		if (s[i] == c)
 		{
 			/* Found it */
-			pFirstOccurrence = (char*)&(s[i]);
+			nFirstOccurrence = i;
 		}
 
 		/* Move on to the next char */
@@ -83,10 +83,10 @@ char* my_strchr(const char* s, char c)
 	 * for the null terminating char (the first scan would
 	 * halt when reaching the null-terminator)
 	 */
-	if ((pFirstOccurrence == NULL) && (s[i] == c))
+	if ((nFirstOccurrence == -1) && (s[i] == c))
 	{
-		pFirstOccurrence = (char*)&(s[i]);
+		nFirstOccurrence = i;
 	}
 
-	return pFirstOccurrence;
+	return nFirstOccurrence;
 }
