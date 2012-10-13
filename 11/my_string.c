@@ -10,29 +10,112 @@
 #include <stdio.h>
 #include <string.h>
 
+void read_user_input();
+
 int main()
 {
+	read_user_input();
 	return 0;
+}
+
+void read_user_input()
+{
+	/* Assume the function name is limited */
+	char szFunction[128];
+
+	/* Read user input untill he exits */
+	for(;;)
+	{
+		printf("Enter a function name to run (case sensitive):\n");
+		scanf("%s", szFunction);
+
+		/* Check which function is needed to run */
+		if (strcmp("my_strchr", szFunction) == 0)
+		{
+			char cToSearchFor;
+			char szToSearchIn[128];
+			int nCharIndex = -1;
+			printf("Enter char to search for:\n");
+			scanf("%s", &cToSearchFor);
+			printf("Enter the string to search in:\n");
+			scanf("%s", szToSearchIn);
+			nCharIndex = my_strchr(szToSearchIn, cToSearchFor);
+			if (nCharIndex == -1)
+			{
+				printf("Char %c was not found in string %s\n", cToSearchFor, szToSearchIn);
+			}
+			else
+			{
+				printf("First occurrence is: %d\n", nCharIndex);
+			}
+		}
+		else if (strcmp("my_strcmp", szFunction) == 0)
+		{
+			char szFirstString[128];
+			char szSecondString[128];
+			printf("Enter the first string to compare:\n");
+			scanf("%s", szFirstString);
+			printf("Enter the second string to compare:\n");
+			scanf("%s", szSecondString);
+			if (my_strcmp(szFirstString, szSecondString) == 0)
+			{
+				printf("Strings match\n");
+			}
+			else
+			{
+				printf("Strings don't match\n");
+			}
+		}
+		else if (strcmp("my_strncmp", szFunction) == 0)
+		{
+			char szFirstString[128];
+			char szSecondString[128];
+			int nNumOfChars;
+			printf("Enter the first string to compare:\n");
+			scanf("%s", szFirstString);
+			printf("Enter the second string to compare:\n");
+			scanf("%s", szSecondString);
+			printf("Enter the number of chars to compare\n");
+			scanf("%d", &nNumOfChars);
+			if (my_strncmp(szFirstString, szSecondString, nNumOfChars) == 0)
+			{
+				printf("Strings match for at least %d first character(s)\n", nNumOfChars);
+			}
+			else
+			{
+				printf("Strings don't match\n");
+			}
+		}
+		else
+		{
+			printf("Error! No method called %s\n", szFunction);
+		}
+	}
 }
 
 int my_strcmp(const char* s, const char* t)
 {
-	unsigned int nMinLength = 0;
+	unsigned int nStringsLength = 0;
 	unsigned int nSLength = strlen(s);
 	unsigned int nTLength = strlen(t);
 
-	/* Assume s is shorter */
-	nMinLength = nSLength;
+	/* Assume both have the same length */
+	nStringsLength = nSLength;
 
-	/* Check if t is shorter */
-	if (nTLength < nMinLength)
+	/* In case both strings aren't the same,
+	 * return the difference in length as
+	 * there is no specific behavior defined
+	 * in the study book for this case
+	 */
+	if (nSLength != nTLength)
 	{
-		/* Mark t as the one with minimal length */
-		nMinLength = nTLength;
+		return (nSLength - nTLength);
 	}
-
-	/* Compare both strings according to the shorter of the two */
-	return my_strncmp(s, t, nMinLength);
+	else
+	{
+		/* Compare both strings */
+		return my_strncmp(s, t, nStringsLength);
+	}
 }
 
 int my_strncmp(const char* s, const char* t, unsigned int n)
