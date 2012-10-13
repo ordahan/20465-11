@@ -1,0 +1,72 @@
+Enter a function name to run (case sensitive):
+my_strlen
+Error! No method called my_strlen
+Enter a function name to run (case sensitive):
+my_strchr
+Enter char to search for:
+a
+Enter the string to search in:
+xyzabcd
+First occurrence is: 3
+Enter a function name to run (case sensitive):
+my_strchr
+Enter char to search for:
+a
+Enter the string to search in:
+xyzbbcd
+Char a was not found in string xyzbbcd
+Enter a function name to run (case sensitive):
+my_strcmp
+Enter the first string to compare:
+holla
+Enter the second string to compare:
+holla
+Strings match
+Enter a function name to run (case sensitive):
+my_strcmp
+Enter the first string to compare:
+hollaz
+Enter the second string to compare:
+holla
+Strings don't match
+Enter a function name to run (case sensitive):
+hollaz
+Error! No method called hollaz
+Enter a function name to run (case sensitive):
+my_strncmp
+Enter the first string to compare:
+hollaz
+Enter the second string to compare:
+holla
+Enter the number of chars to compare
+5
+Strings match for at least 5 first character(s)
+Enter a function name to run (case sensitive):
+my_strncmp
+Enter the first string to compare:
+hollaz
+Enter the second string to compare:
+holla
+Enter the number of chars to compare
+6
+Strings don't match
+Enter a function name to run (case sensitive):
+my_strncmp
+Enter the first string to compare:
+hollaz
+Enter the second string to compare:
+holla
+Enter the number of chars to compare
+8
+Strings don't match
+Enter a function name to run (case sensitive):
+my_strncmp
+Enter the first string to compare:
+holla
+Enter the second string to compare:
+holla
+Enter the number of chars to compare
+7
+Strings match for at least 7 first character(s)
+Enter a function name to run (case sensitive):
+
