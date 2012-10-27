@@ -7,5 +7,7 @@ int main()
 
 eParBalanceLine get_par_balance_in_line(char* szLine)
 {
-	return E_PAR_LINE_NOT_BALANCED;
+	eParBalanceLine eBalanced = E_PAR_LINE_BALANCED;
+
+	return eBalanced;
 }
