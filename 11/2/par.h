@@ -8,6 +8,8 @@
 #ifndef PAR_H_
 #define PAR_H_
 
+#include <stdio.h>
+
 typedef enum
 {
 	E_PAR_LINE_BALANCED,
@@ -27,4 +29,10 @@ typedef enum
  */
 eParBalanceLine get_par_balance_in_line(char* szLine, unsigned int nLineLength, unsigned int nStartBlock);
 
+/**
+ * Reads a C program from given stream
+ * and checks if its parenthesis-balanced.
+ * Prints errors accordingly.
+ */
+void par_balance(FILE* stream);
 #endif /* PAR_H_ */

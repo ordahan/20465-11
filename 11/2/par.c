@@ -119,6 +119,9 @@ int toggle_ignore(char* szString, int nCurrLinePos, int fIgnore)
 /* Entry Point */
 int main()
 {
+	/* Read program from stdin and check it */
+	par_balance(stdin);
+
 	return 0;
 }
 
@@ -199,4 +202,9 @@ eParBalanceLine get_par_balance_in_line(char* szLine,
 	}
 
 	return eBalanced;
+}
+
+void par_balance(FILE* stream)
+{
+
 }
