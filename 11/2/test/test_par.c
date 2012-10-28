@@ -9,6 +9,17 @@ int test_line_balance(char* szLine, eParBalanceLine expected, unsigned int nStar
 	return get_par_balance_in_line(szLine, strlen(szLine), nStartBlock) == expected;
 }
 
+int test_par_balance(const char* szProgram)
+{
+    char* pBuf = NULL;
+    size_t nSize;
+    FILE *pTempStream = open_memstream(&pBuf, &nSize);
+    printf("%s\n", szProgram);
+    fputs(szProgram, pTempStream);
+    fputc('\n', pTempStream);
+    return par_balance(pTempStream);
+}
+
 int test_main()
 {
 	/* 1 Single line status */
@@ -43,7 +54,16 @@ int test_main()
 	assert(test_line_balance("{ adsa ()} (}", E_PAR_LINE_NOT_BALANCED, 0));
 
 	/* 2 Check entire program */
-
+	assert(test_par_balance("") == 1);
+	assert(test_par_balance("()") == 1);
+	assert(test_par_balance(")") == 0);
+	assert(test_par_balance("(") == 0);
+	assert(test_par_balance("(\n)") == 0);
+	assert(test_par_balance("{") == 0);
+	assert(test_par_balance("()\n[\n") == 0);
+	assert(test_par_balance("()\n{\n()[(())]}") == 1);
+	assert(test_par_balance("()\n\"[\"\n") == 1);
+	assert(test_par_balance("/*(*/\n()") == 0);
 
 	printf("All tests run successfully\n");
 

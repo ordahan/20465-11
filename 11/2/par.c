@@ -1,4 +1,6 @@
 #include "par.h"
+#include <string.h>
+#include <stdio.h>
 
 /* Global Const */
 static const unsigned int MAX_LINE_LENGTH = 100;
@@ -204,7 +206,54 @@ eParBalanceLine get_par_balance_in_line(char* szLine,
 	return eBalanced;
 }
 
-void par_balance(FILE* stream)
+int par_balance(FILE* stream)
 {
+	char szLine[MAX_LINE_LENGTH];
+	int nStartBlockBalance = 0;
+	int fProgramBalanced = 1;
 
+	printf("Enter a program to check:\n");
+
+	/* Read the program line-by-line */
+	while (fgets(szLine, MAX_LINE_LENGTH, stream) != NULL)
+	{
+		/* Remove the newline at the end of the line before we print */
+		szLine[strlen(szLine) - 1] = '\0';
+
+		printf("Line: '%s' is: ", szLine);
+
+		/* Check if the line is balanced */
+		switch (get_par_balance_in_line(szLine, strlen(szLine), nStartBlockBalance))
+		{
+			case E_PAR_LINE_BALANCED:
+			{
+				printf("balanced.\n");
+				break;
+			}
+			case E_PAR_LINE_START_BLOCK:
+			{
+				nStartBlockBalance++;
+			}
+			case E_PAR_LINE_NOT_BALANCED:
+			{
+				fProgramBalanced = 0;
+				printf("not balanced.\n");
+				break;
+			}
+			case E_PAR_LINE_ERROR:
+			default:
+			{
+				printf("not a valid C line.");
+				break;
+			}
+		}
+	}
+
+	/* Check overall if the program is ok */
+	if (nStartBlockBalance != 0)
+	{
+		fProgramBalanced = 0;
+	}
+
+	return fProgramBalanced;
 }
