@@ -14,7 +14,7 @@ typedef enum
 {
 	E_PAR_LINE_BALANCED,
 	E_PAR_LINE_NOT_BALANCED,
-	E_PAR_LINE_START_BLOCK,
+	E_PAR_LINE_NOT_BALANCED_CURLY,
 	E_PAR_LINE_ERROR
 }eParBalanceLine;
 
@@ -23,11 +23,11 @@ typedef enum
  *
  * @param szLine The line to check
  * @param nLineLength Length of the line (num of chars, not including newline char)
- * @param nStartBlock Number of blocks that opened so far and havn't been closed
+ * @param io_pCurlyBalance Number of blocks that opened so far and havn't been closed
  *
  * @return The status of the balance in the line
  */
-eParBalanceLine get_par_balance_in_line(char* szLine, unsigned int nLineLength, unsigned int nStartBlock);
+eParBalanceLine get_par_balance_in_line(char* szLine, unsigned int nLineLength, int* io_pCurlyBalance);
 
 /**
  * Reads a C program from given stream

@@ -130,7 +130,7 @@ int main()
 /* API Functions */
 eParBalanceLine get_par_balance_in_line(char* szLine,
 										unsigned int nLineLength,
-										unsigned int nStartBlock)
+										int* io_pCurlyBalance)
 {
 	eParBalanceLine eBalanced = E_PAR_LINE_BALANCED;
 	char arrPars[MAX_LINE_LENGTH];
@@ -138,6 +138,7 @@ eParBalanceLine get_par_balance_in_line(char* szLine,
 	int i = 0;
 	int nCurrCharIndex = 0;
 	int fIgnore = 0; /* When we are in the middle of a string, ignore chars */
+	int nCurlyBalance = 0;
 
 	/* Make sure the line's length is ok */
 	if (nLineLength > MAX_LINE_LENGTH)
@@ -147,16 +148,6 @@ eParBalanceLine get_par_balance_in_line(char* szLine,
 	else if (nLineLength == 0)
 	{
 		return E_PAR_LINE_BALANCED;
-	}
-
-	/* Check the special case in which the line is
-	 * the start of a new block and unbalanced by it
-	 * line is known to be at least 1 char in length
-	 */
-	if (szLine[0] == '{')
-	{
-		eBalanced = E_PAR_LINE_START_BLOCK;
-		nCurrCharIndex = 1;
 	}
 
 	/* Go over the entire line and check for balancing */
@@ -172,9 +163,14 @@ eParBalanceLine get_par_balance_in_line(char* szLine,
 			switch (szLine[i])
 			{
 			/* An opening parenthesis */
+			case '{':
+			{
+				/* Count curly separately */
+				nCurlyBalance++;
+				/* Continue to the rest of the handling normally */
+			}
 			case '(':
 			case '[':
-			case '{':
 			{
 				/* Don't count these as valid if we already short of parenthesis */
 				if (nParDepth >= -1)
@@ -184,9 +180,14 @@ eParBalanceLine get_par_balance_in_line(char* szLine,
 				break;
 			}
 			/* A closing parenthesis */
+			case '}':
+			{
+				/* Count curly separately */
+				nCurlyBalance--;
+				/* Continue to the rest of the handling normally */
+			}
 			case ')':
 			case ']':
-			case '}':
 			{
 				nParDepth = closing_parenthesis(szLine[i], arrPars, nParDepth);
 				break;
@@ -203,13 +204,20 @@ eParBalanceLine get_par_balance_in_line(char* szLine,
 		eBalanced = E_PAR_LINE_NOT_BALANCED;
 	}
 
+	/* Curly braces not balanced */
+	if (nCurlyBalance != 0)
+	{
+		eBalanced = E_PAR_LINE_NOT_BALANCED_CURLY;
+		*io_pCurlyBalance += nCurlyBalance;
+	}
+
 	return eBalanced;
 }
 
 int par_balance(FILE* stream)
 {
 	char szLine[MAX_LINE_LENGTH];
-	int nStartBlockBalance = 0;
+	int nCurlyBlockBalance = 0;
 	int fProgramBalanced = 1;
 
 	printf("Enter a program to check:\n");
@@ -223,20 +231,29 @@ int par_balance(FILE* stream)
 		printf("Line: '%s' is: ", szLine);
 
 		/* Check if the line is balanced */
-		switch (get_par_balance_in_line(szLine, strlen(szLine), nStartBlockBalance))
+		switch (get_par_balance_in_line(szLine, strlen(szLine), &nCurlyBlockBalance))
 		{
 			case E_PAR_LINE_BALANCED:
 			{
 				printf("balanced.\n");
 				break;
 			}
-			case E_PAR_LINE_START_BLOCK:
-			{
-				nStartBlockBalance++;
-			}
 			case E_PAR_LINE_NOT_BALANCED:
 			{
-				fProgramBalanced = 0;
+				/* If there was a block opening - The program might
+				 * still balance out so don't be hasty to decide
+				 * its not balanced
+				 */
+				if (nCurlyBlockBalance <= 0)
+				{
+					/*
+					 * Either too many blocks were closed, or
+					 * the line is not balanced because of some other
+					 * parenthesis type
+					 */
+					fProgramBalanced = 0;
+				}
+				printf ("curly: %d ", nCurlyBlockBalance);
 				printf("not balanced.\n");
 				break;
 			}
@@ -249,8 +266,8 @@ int par_balance(FILE* stream)
 		}
 	}
 
-	/* Check overall if the program is ok */
-	if (nStartBlockBalance != 0)
+	/* Finally make sure that the blocks balanced out */
+	if (nCurlyBlockBalance != 0)
 	{
 		fProgramBalanced = 0;
 	}
