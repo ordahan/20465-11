@@ -43,11 +43,18 @@ int closing_parenthesis(char cPar, char arrPars[MAX_LINE_LENGTH], int nParDepth)
 /**
  * Checks if the current char is entering or exiting ignore mode
  *
- * @param szString String in which we check the curr char
- * @param nCurrLinePos Current position in the string where the char is
- * @param fIgnore Whether we are already in ignore mode or not
+ * @param currChar Current char in the program
  */
-int toggle_ignore(char* szString, int nCurrLinePos, int fIgnore);
+int toggle_ignore(char currChar);
+
+/**
+ * Reads a C program from a stream and prints the same program
+ * without the comments to another stream
+
+ * @param inStream Given stream that has the original program
+ * @param outStream Stream to print the formatted program out to
+ */
+void ClearComments(FILE* inStream, FILE* outStream);
 
 /* Internal Functions */
 char get_opening_parenthesis(char cPar)
@@ -97,32 +104,77 @@ int closing_parenthesis(char cPar, char arrPars[MAX_LINE_LENGTH], int nParDepth)
 	return nParDepth;
 }
 
-int toggle_ignore(char* szString, int nCurrLinePos, int fIgnore)
+enum status {OUT, LEFT_SLASH, RIGHT_STAR, IN_STRING, IN_COMMENT};
+int toggle_ignore(char currChar)
 {
-	/* Start or end of a string */
-	if ((szString[nCurrLinePos] == '"') &&
-	/* Not escaped by a backslash */
-		(szString[nCurrLinePos-1] != '\\'))
+	static int state = OUT;
+
+	switch (state)
 	{
-		/* Toggle ignore mode */
-		if (fIgnore == 1)
+	case OUT:
+		if (currChar == '\"' || currChar == '\'')
 		{
-			return 0;
+			state = IN_STRING;
+		}
+		else if (currChar == '/')
+		{
+			state = LEFT_SLASH;
+		}
+		break;
+	case LEFT_SLASH:
+		if (currChar == '*')
+		{
+			state = IN_COMMENT;
 		}
 		else
 		{
-			return 1;
+			state = OUT;
 		}
+		break;
+	case IN_COMMENT:
+		if (currChar == '*')
+		{
+			state = RIGHT_STAR;
+		}
+		break;
+	case RIGHT_STAR:
+		if (currChar == '/')
+		{
+			state = OUT;
+		}
+		else if (currChar != '*')
+		{
+			state = IN_COMMENT;
+		}
+		break;
+	case IN_STRING:
+		if (currChar == '\"' || currChar == '\'')
+		{
+			state = OUT;
+		}
+		break;
+
+	default:
+		break;
 	}
 
-	return fIgnore;
+	/* Certains states cause us to be in "ignore mode" */
+	if (state == IN_COMMENT ||
+		state == IN_STRING)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 /* Entry Point */
 int main()
 {
 	/* Read program from stdin and check it */
-	par_balance(stdin);
+	par_balance(stdin, stdout);
 
 	return 0;
 }
@@ -154,7 +206,7 @@ eParBalanceLine get_par_balance_in_line(char* szLine,
 	for (i = nCurrCharIndex; (i < MAX_LINE_LENGTH) && (i < nLineLength); ++i)
 	{
 		/* Set the ignore flag as needed */
-		fIgnore = toggle_ignore(szLine, i, fIgnore);
+		fIgnore = toggle_ignore(szLine[i]);
 
 		/* Not in ignore mode */
 		if (!(fIgnore == 1))
@@ -213,54 +265,53 @@ eParBalanceLine get_par_balance_in_line(char* szLine,
 
 	return eBalanced;
 }
-
-int par_balance(FILE* stream)
+int par_balance(FILE* in_stream, FILE* out_stream)
 {
 	char szLine[MAX_LINE_LENGTH];
 	int nCurlyBlockBalance = 0;
 	int fProgramBalanced = 1;
 
-	printf("Enter a program to check:\n");
+	fprintf(out_stream, "Enter a program to check:\n");
 
 	/* Read the program line-by-line */
-	while (fgets(szLine, MAX_LINE_LENGTH, stream) != NULL)
+	while (fgets(szLine, MAX_LINE_LENGTH, in_stream) != NULL)
 	{
 		/* Remove the newline at the end of the line before we print */
 		szLine[strlen(szLine) - 1] = '\0';
 
-		printf("Line: '%s' is: ", szLine);
+		fprintf(out_stream, "Line: '%s' is: ", szLine);
 
 		/* Check if the line is balanced */
 		switch (get_par_balance_in_line(szLine, strlen(szLine), &nCurlyBlockBalance))
 		{
 			case E_PAR_LINE_BALANCED:
 			{
-				printf("balanced.\n");
+				fprintf(out_stream, "balanced.\n");
 				break;
 			}
-			case E_PAR_LINE_NOT_BALANCED:
+			case E_PAR_LINE_NOT_BALANCED_CURLY:
 			{
 				/* If there was a block opening - The program might
 				 * still balance out so don't be hasty to decide
 				 * its not balanced
 				 */
-				if (nCurlyBlockBalance <= 0)
+				if (nCurlyBlockBalance >= 0)
 				{
-					/*
-					 * Either too many blocks were closed, or
-					 * the line is not balanced because of some other
-					 * parenthesis type
-					 */
-					fProgramBalanced = 0;
+					fprintf(out_stream, "not balanced (might still balance out).\n");
+					break;
 				}
-				printf ("curly: %d ", nCurlyBlockBalance);
-				printf("not balanced.\n");
+				/* Continue to the next case handling */
+			}
+			case E_PAR_LINE_NOT_BALANCED:
+			{
+				fProgramBalanced = 0;
+				fprintf(out_stream, "not balanced.\n");
 				break;
 			}
 			case E_PAR_LINE_ERROR:
 			default:
 			{
-				printf("not a valid C line.");
+				fprintf(out_stream, "not a valid C line.\n");
 				break;
 			}
 		}

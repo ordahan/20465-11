@@ -34,9 +34,10 @@ eParBalanceLine get_par_balance_in_line(char* szLine, unsigned int nLineLength, 
  * and checks if its parenthesis-balanced.
  * Prints errors accordingly.
  *
- * @param stream An input stream to the function to read a C program from
+ * @param in_stream An input stream to the function to read a C program from
+ * @param out_stram An output stream to the function to print the results to
  *
  * @return 1 if program is balanced, 0 otherwise.
  */
-int par_balance(FILE* stream);
+int par_balance(FILE* in_stream, FILE* out_stream);
 #endif /* PAR_H_ */

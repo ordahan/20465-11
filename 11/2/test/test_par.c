@@ -16,13 +16,28 @@ int test_line_balance(char* szLine,
 
 int test_par_balance(const char* szProgram)
 {
-    char* pBuf = NULL;
-    size_t nSize;
-    FILE *pTempStream = open_memstream(&pBuf, &nSize);
-    printf("%s\n", szProgram);
-    fputs(szProgram, pTempStream);
-    fputc('\n', pTempStream);
-    return par_balance(pTempStream);
+	int fBalance = 0;
+	char c;
+    char* pInBuf = NULL;
+    char* pOutBuf = NULL;
+    size_t nInSize, nOutSize;
+    FILE *fInStream = open_memstream(&pInBuf, &nInSize);
+    FILE *fOutStream = open_memstream(&pOutBuf, &nOutSize);
+
+    /* Send the program to the stream that will be read from */
+    fputs(szProgram, fInStream);
+    fputc('\n', fInStream);
+
+    /* Run the algorithm */
+    fBalance = par_balance(fInStream, fOutStream);
+
+    /* Print the results */
+    while ((c = fgetc(fOutStream)) != EOF)
+    {
+    	putchar(c);
+    }
+
+    return fBalance;
 }
 
 int test_main()
@@ -38,6 +53,7 @@ int test_main()
 	assert(test_line_balance("(abcdefghijkl[abcd]weqqwaas)", E_PAR_LINE_BALANCED, 0, 0));
 	assert(test_line_balance("(\"()\")", E_PAR_LINE_BALANCED, 0, 0));
 	assert(test_line_balance("(\"[\")", E_PAR_LINE_BALANCED, 0, 0));
+	assert(test_line_balance("(\'[\')", E_PAR_LINE_BALANCED, 0, 0));
 
 	/* 1.2 Unbalanced */
 	assert(test_line_balance("(", E_PAR_LINE_NOT_BALANCED, 0, 0));
