@@ -271,8 +271,6 @@ int par_balance(FILE* in_stream, FILE* out_stream)
 	int nCurlyBlockBalance = 0;
 	int fProgramBalanced = 1;
 
-	fprintf(out_stream, "Enter a program to check:\n");
-
 	/* Read the program line-by-line */
 	while (fgets(szLine, MAX_LINE_LENGTH, in_stream) != NULL)
 	{
@@ -321,6 +319,15 @@ int par_balance(FILE* in_stream, FILE* out_stream)
 	if (nCurlyBlockBalance != 0)
 	{
 		fProgramBalanced = 0;
+	}
+
+	if (fProgramBalanced)
+	{
+		fprintf(out_stream, "Program is balanced.\n");
+	}
+	else
+	{
+		fprintf(out_stream, "Program not balanced.\n");
 	}
 
 	return fProgramBalanced;

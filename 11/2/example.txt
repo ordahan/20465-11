@@ -1,0 +1,120 @@
+Running on program:
+
+Line: '' is: balanced.
+Program is balanced.
+
+Running on program:
+()
+Line: '()' is: balanced.
+Program is balanced.
+
+Running on program:
+)
+Line: ')' is: not balanced.
+Program not balanced.
+
+Running on program:
+(
+Line: '(' is: not balanced.
+Program not balanced.
+
+Running on program:
+(
+)
+Line: '(' is: not balanced.
+Line: ')' is: not balanced.
+Program not balanced.
+
+Running on program:
+{
+Line: '{' is: not balanced (might still balance out).
+Program not balanced.
+
+Running on program:
+()
+[
+
+Line: '()' is: balanced.
+Line: '[' is: not balanced.
+Line: '' is: balanced.
+Program not balanced.
+
+Running on program:
+{}
+[]
+
+Line: '{}' is: balanced.
+Line: '[]' is: balanced.
+Line: '' is: balanced.
+Program is balanced.
+
+Running on program:
+{
+}
+Line: '{' is: not balanced (might still balance out).
+Line: '}' is: not balanced (might still balance out).
+Program is balanced.
+
+Running on program:
+()
+{
+()[(())]}
+Line: '()' is: balanced.
+Line: '{' is: not balanced (might still balance out).
+Line: '()[(())]}' is: not balanced (might still balance out).
+Program is balanced.
+
+Running on program:
+()
+{{}
+()[(())]}
+Line: '()' is: balanced.
+Line: '{{}' is: not balanced (might still balance out).
+Line: '()[(())]}' is: not balanced (might still balance out).
+Program is balanced.
+
+Running on program:
+()
+{{
+}()[(())]}
+Line: '()' is: balanced.
+Line: '{{' is: not balanced (might still balance out).
+Line: '}()[(())]}' is: not balanced (might still balance out).
+Program is balanced.
+
+Running on program:
+{{{
+}}
+}
+Line: '{{{' is: not balanced (might still balance out).
+Line: '}}' is: not balanced (might still balance out).
+Line: '}' is: not balanced (might still balance out).
+Program is balanced.
+
+Running on program:
+()
+"["
+
+Line: '()' is: balanced.
+Line: '"["' is: balanced.
+Line: '' is: balanced.
+Program is balanced.
+
+Running on program:
+()
+"["]
+
+Line: '()' is: balanced.
+Line: '"["]' is: not balanced.
+Line: '' is: balanced.
+Program not balanced.
+
+Running on program:
+/*)*/
+Line: '/*)*/' is: balanced.
+Program is balanced.
+
+Running on program:
+/*(*/)
+Line: '/*(*/)' is: not balanced.
+Program not balanced.

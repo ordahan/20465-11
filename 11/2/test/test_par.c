@@ -24,6 +24,8 @@ int test_par_balance(const char* szProgram)
     FILE *fInStream = open_memstream(&pInBuf, &nInSize);
     FILE *fOutStream = open_memstream(&pOutBuf, &nOutSize);
 
+    printf("Running on program:\n%s\n", szProgram);
+
     /* Send the program to the stream that will be read from */
     fputs(szProgram, fInStream);
     fputc('\n', fInStream);
@@ -36,6 +38,8 @@ int test_par_balance(const char* szProgram)
     {
     	putchar(c);
     }
+
+    printf("\n");
 
     return fBalance;
 }
