@@ -1,4 +1,8 @@
 /**
+ * Or Dahan 201644929
+ */
+
+/**
  * Compares two strings in lexical order
  *
  * @param s: First string to compare

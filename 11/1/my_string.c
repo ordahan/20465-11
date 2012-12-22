@@ -2,7 +2,8 @@
  * my_string.c
  *
  *  Created on: Oct 6, 2012
- *      Author: Or Dahan
+ *      Author: Or Dahan 201644929
+ *
  */
 
 #include "my_string.h"

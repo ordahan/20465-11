@@ -2,7 +2,7 @@
  * par.h
  *
  *  Created on: Oct 27, 2012
- *      Author: nika123
+ *      Author: Or Dahan 201644929
  */
 
 #ifndef PAR_H_
