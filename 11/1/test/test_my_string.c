@@ -49,12 +49,12 @@ int test_main()
 
 	/* test my_strcmp */
 	assert(my_strcmp("", "") == 0);
-	assert(my_strcmp("a", "") == 0);
-	assert(my_strcmp("", "b") == 0);
+	assert(my_strcmp("a", "") != 0);
+	assert(my_strcmp("", "b") != 0);
 	assert(my_strcmp("a", "b") == -1);
 	assert(my_strcmp("b", "a") == 1);
 	assert(my_strcmp("ab", "bb") == -1);
-	assert(my_strcmp("ab", "a") == 0);
+	assert(my_strcmp("ab", "a") != 0);
 	assert(my_strcmp("aA", "aB") == -1);
 	assert(my_strcmp("ac", "ab") == 1);
 
